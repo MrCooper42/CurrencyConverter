@@ -11,6 +11,12 @@ import { CoinBaseConfig } from '@models/coinbase.config';
 import { ExchangeRateResponse } from '@models/coinbase.models';
 
 import { paths } from '../../coinbase/openapi-schema';
+import { LRUCache } from "lru-cache";
+
+const cache = new LRUCache<Currencies, ExchangeRateResponse>({
+    max: 5000,
+    ttl: 3000, // Reset every 3 seconds
+});
 
 class CoinBaseClient {
     private client: Client<paths, any>;
@@ -28,6 +34,13 @@ class CoinBaseClient {
     async getConversions(
         from: Currencies,
     ): Promise<{ data: ExchangeRateResponse; requestId: string }> {
+        const cachedResponse = cache.get(from);
+        if (cachedResponse) {
+            return {
+                requestId: uuid(),
+                data: cachedResponse
+            }
+        }
         const response = await this.client.GET('/v2/exchange-rates', {
             params: {
                 query: {
@@ -36,6 +49,7 @@ class CoinBaseClient {
             },
         });
 
+        cache.set(from, response.data.data);
         return {
             requestId:
                 response.response.headers.get(internalRequestIdKey) ?? uuid(),
