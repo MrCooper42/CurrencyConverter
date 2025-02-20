@@ -7,44 +7,36 @@
   },
   "servers": [
 	{
-	  "url": "https://api.exchange.coinbase.com"
+	  "url": "https://api.coinbase.com"
 	}
   ],
   "paths": {
-	"/conversions": {
-	  "post": {
-		"summary": "Convert a currency amount from one currency to another",
-		"description": "Converts funds from from currency to to currency. Funds are converted on the from account in the profile_id profile.",
-		"requestBody": {
-		  "description": "The conversion response",
-		  "content": {
-			"application/json": {
-			  "schema": {
-				"type": "object",
-				"properties": {
-				  "data": {
-					"$ref": "#/components/schemas/ConversionRequest"
-				  }
-				}
-			  }
-			}
+	"/v2/exchange-rates": {
+	  "get": {
+		"summary": "Get a list of current exchange rates",
+		"description": "Get current exchange rates. Default base currency is USD but it can be defined as any supported currency (see Currencies endpoint). Returned rates will define the exchange rate for one unit of the base currency",
+		"parameters": [{
+		  "in": "query",
+		  "name": "currency",
+		  "schema": {
+			"type": "string",
+			"example": "BTC"
 		  }
-		},
-		"parameters": [],
+		}],
 		"security": [],
 		"tags": [
 		  "Currency"
 		],
 		"responses": {
 		  "200": {
-			"description": "The conversion response",
+			"description": "The currency response",
 			"content": {
 			  "application/json": {
 				"schema": {
 				  "type": "object",
 				  "properties": {
 					"data": {
-					  "$ref": "#/components/schemas/ConversionResponse"
+					  "$ref": "#/components/schemas/ExchangeRateResponse"
 					}
 				  }
 				}
@@ -56,88 +48,38 @@
 	}
   },
   "components": {
-	"securitySchemes": {
-	  "coinbaseAccessCode": {
-		"type": "oauth2",
-		"flows": {
-		  "authorizationCode": {
-			"authorizationUrl": "https://www.coinbase.com/oauth/authorize",
-			"tokenUrl": "https://www.coinbase.com/oauth/token",
-			"scopes": {
-			  "wallet:accounts:read": "List user’s accounts and their balances"
+	"schemas": {
+	  "ExchangeRateResponse": {
+		"type": "object",
+		"example": {
+		  "data": {
+			"currency": "BTC",
+			"rates": {
+			  "AED": "36.73",
+			  "AFN": "589.50",
+			  "ALL": "1258.82",
+			  "AMD": "4769.49",
+			  "ANG": "17.88",
+			  "AOA": "1102.76",
+			  "ARS": "90.37",
+			  "AUD": "12.93",
+			  "AWG": "17.93",
+			  "AZN": "10.48",
+			  "BAM": "17.38"
+			}
+		  }
+		},
+		"properties": {
+		  "currency": {
+			"type": "string"
+		  },
+		  "rates": {
+			"type": "object",
+			"additionalProperties": {
+			  "type": "string"
 			}
 		  }
 		}
-	  }
-	},
-	"schemas": {
-	  "ConversionRequest": {
-		"type": "object",
-		"required": [
-		  "from",
-		  "to",
-		  "amount"
-		],
-		"properties": {
-		  "profile_id": {
-			"type": "string",
-			"description": "Profile ID"
-		  },
-		  "from": {
-			"type": "string",
-			"description": "Currency the amount is in"
-		  },
-		  "to": {
-			"type": "string",
-			"description": "Currency to convert to"
-		  },
-		  "amount": {
-			"type": "number",
-			"description": "Amount to convert"
-		  }
-		}
-	  },
-	  "ConversionResponse": {
-		"type": "object",
-		"example": {
-		  "id": "c5aaf125-d99e-41fe-82ea-ad068038b278",
-		  "amount": "11.00000000",
-		  "from_account_id": "5dcc143c-fb96-4f72-aebf-a165e3d29b53",
-		  "to_account_id": "6100247f-90fc-4335-ac17-d99839f0c909",
-		  "from": "USDC",
-		  "to": "USD",
-		  "fee_amount": "0.0000000000000000"
-		},
-		"properties": {
-		  "id": {
-			"type": "string"
-		  },
-		  "amount": {
-			"type": "string"
-		  },
-		  "from_account_id": {
-			"type": "string"
-		  },
-		  "to_account_id": {
-			"type": "string"
-		  },
-		  "fee_amount": {
-			"type": "string"
-		  },
-		  "from": {
-			"type": "string"
-		  },
-		  "to": {
-			"type": "string"
-		  }
-		},
-		"required": [
-		  "id",
-		  "amount",
-		  "from_account_id",
-		  "to_account_id",
-		  "fee_amount"
-		]
 	  }
 	}
   }

@@ -1,5 +1,5 @@
 interface CoinBaseConfig {
-    baseUrl: "https://api.exchange.coinbase.com";
+    baseUrl: 'https://api.coinbase.com';
 }
 
 export { CoinBaseConfig };

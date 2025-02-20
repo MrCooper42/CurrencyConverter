@@ -1,6 +1,5 @@
 import { components } from '../../coinbase/openapi-schema';
 
-type ConversionRequest = components['schemas']['ConversionRequest'];
-type ConversionResponse = components['schemas']['ConversionResponse'];
+type ExchangeRateResponse = components['schemas']['ExchangeRateResponse'];
 
-export { ConversionRequest, ConversionResponse };
+export { ExchangeRateResponse };

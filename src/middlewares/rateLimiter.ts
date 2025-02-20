@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { LRUCache } from 'lru-cache';
 
+import { ApiError } from '@utils/apiError';
+import { responseMessage } from '@utils/responseMessage';
+import { RESPONSE_STATUS } from '@utils/responseStatus';
+
 const cache = new LRUCache<string, number>({
     max: 5000,
     ttl: 1000 * 60 * 60 * 24, // Reset every 24 hours
@@ -14,23 +18,25 @@ const getCurrentLimit = () => {
     return { day, limit };
 };
 
+// TODO: write unit tests for rate limiter;
+
 const rateLimiter = (
     request: Request,
-    response: Response,
+    _response: Response,
     next: NextFunction,
 ) => {
-    const ip = request.ip || request.headers['Authorization'];
+    const token = request.headers['Authorization'];
     const { day, limit } = getCurrentLimit();
-    const cashKey = `${day}_${ip}`;
+    const cashKey = `${day}_${token}`;
     let requestCount = cache.get(cashKey) || 0;
 
     requestCount++;
 
     if (requestCount > limit) {
-        response.status(429).json({
-            error: 'Rate limit exceeded',
-        });
-        return;
+        throw new ApiError(
+            RESPONSE_STATUS.TOO_MANY_REQUEST,
+            responseMessage.OTHER.RATE_LIMIT,
+        );
     }
 
     cache.set(cashKey, requestCount);

@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import { userRouter } from '@routes/currency.routes';
+import { currencyRouter } from '@routes/currency.routes';
 
 const rootRouter = Router();
 
-rootRouter.use('/user', userRouter);
+rootRouter.use('/currency', currencyRouter);
 
 export { rootRouter };

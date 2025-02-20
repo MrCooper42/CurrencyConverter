@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 
+import { validateAuth } from '@middlewares/authorizationMiddleware';
 import { errorHandler } from '@middlewares/globalErrorHandler';
 import { rateLimiter } from '@middlewares/rateLimiter';
 
@@ -20,8 +21,8 @@ app.get('/ping', (req, res) => {
     return res.send('healthy');
 });
 
-app.use('/v1', rootRouter);
+app.use('/v1', validateAuth, rateLimiter, rootRouter);
 
-app.use(errorHandler, rateLimiter);
+app.use(errorHandler);
 
 export { app };

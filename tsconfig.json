@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
 	"outDir": "./dist",
+	"baseUrl": ".",
 	"esModuleInterop": true,
 	"forceConsistentCasingInFileNames": true,
 	"strict": true,
@@ -8,35 +9,35 @@
 	"resolveJsonModule": true,
 	"skipLibCheck": true,
 	"paths": {
-	  "@config/*": [
-		"./src/config/*"
+	  "@db/*": [
+		"prisma/*"
 	  ],
 	  "@controllers/*": [
-		"./src/controllers/*"
+		"src/controllers/*"
 	  ],
 	  "@middlewares/*": [
-		"./src/middlewares/*"
+		"src/middlewares/*"
 	  ],
 	  "@validators/*": [
-		"./src/validators/*"
+		"src/validators/*"
 	  ],
 	  "@routes/*": [
-		"./src/routes/*"
+		"src/routes/*"
 	  ],
 	  "@models/*": [
-		"./src/models/*"
+		"src/models/*"
 	  ],
 	  "@services/*": [
-		"./src/services/*"
+		"src/services/*"
 	  ],
 	  "@logger/*": [
-		"./src/logging/*"
+		"src/logging/*"
 	  ],
 	  "@utils/*": [
-		"./src/utils/*"
+		"src/utils/*"
 	  ],
 	  "@projTypes/*": [
-		"./src/types/*"
+		"src/types/*"
 	  ]
 	}
   },

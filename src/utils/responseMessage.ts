@@ -1,14 +1,12 @@
 const responseMessage = {
-    USER: {
-        CREATED: 'User created successfully',
-        LOGGED_IN: 'User logged in successfully',
-        UPDATED: 'User details updated successfully',
-        DELETE_USER: 'User deleted successfully',
-        RETRIEVED: 'Users retrieved successfully',
-        DELETED: 'User is deleted',
+    CURRENCY: {
+        CONVERTED: 'Currency successfully converted',
+        INVALID_REQUEST: 'Invalid or missing required query parameters',
+        UNAUTHORIZED: 'Missing or invalid credentials',
     },
     OTHER: {
         SERVER_ERROR: 'Internal Server Error',
+        RATE_LIMIT: 'Rate limit exceeded',
     },
 };
 

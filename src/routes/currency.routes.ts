@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import { getConversion } from '@controllers/user.controllers';
+import { getConversion } from '@controllers/currency.controllers';
 
-const userRouter = Router();
+const currencyRouter = Router();
 
-userRouter.get('/currency/conversion', getConversion);
+currencyRouter.get('/conversion', getConversion);
 
-export { userRouter };
+export { currencyRouter };

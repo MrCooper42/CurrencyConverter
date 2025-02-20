@@ -3,14 +3,11 @@ import { cpus } from 'os';
 
 import { config } from 'dotenv';
 
-import { dbConnection } from '@config/db';
-
 import { logger } from '@logger/logger';
 
 import { app } from './app';
 
 config();
-dbConnection();
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 8080;
 

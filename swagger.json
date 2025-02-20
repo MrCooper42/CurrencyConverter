@@ -1,0 +1,105 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+	"title": "Currency API",
+	"description": "The currency API",
+	"version": "2.0.0"
+  },
+  "servers": [
+	{
+	  "url": "localhost:8080"
+	}
+  ],
+  "security": [
+	{
+	  "bearerAuth": []
+	}
+  ],
+  "paths": {
+	"/ping": {
+	  "summary": "Gets healthy status",
+	  "description": "returns healthy if server is running"
+	},
+	"/v1/currency/conversion": {
+	  "get": {
+		"summary": "Convert a currency from one to another",
+		"description": "This api will pull data from coinbase exchange rates and convert the amount from the requested currency to the respected output. Limited to 100 calls on weekdays and 200 on weekends",
+		"parameters": [
+		  {
+			"in": "query",
+			"name": "from",
+			"schema": {
+			  "type": "string",
+			  "example": "BTC"
+			}
+		  },
+		  {
+			"in": "query",
+			"name": "to",
+			"schema": {
+			  "type": "string",
+			  "example": "usd"
+			}
+		  },
+		  {
+			"in": "query",
+			"name": "amount",
+			"schema": {
+			  "type": "number",
+			  "example": "999.20"
+			}
+		  }
+		],
+		"security": [],
+		"tags": [
+		  "Currency"
+		],
+		"responses": {
+		  "200": {
+			"description": "The conversion response",
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"data": {
+					  "$ref": "#/components/schemas/ConversionResponse"
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  }
+	}
+  },
+  "components": {
+	"securitySchemes": {
+	  "bearerAuth": {
+		"type": "http",
+		"scheme": "bearer",
+		"bearerFormat": "JWT"
+	  }
+	},
+	"schemas": {
+	  "ConversionResponse": {
+		"type": "object",
+		"example": {
+		  "data": {}
+		},
+		"properties": {
+		  "currency": {
+			"type": "string"
+		  },
+		  "rates": {
+			"type": "object",
+			"additionalProperties": {
+			  "type": "string"
+			}
+		  }
+		}
+	  }
+	}
+  }
+}

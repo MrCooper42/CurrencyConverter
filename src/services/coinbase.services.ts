@@ -1,9 +1,14 @@
+import { Currencies } from '@prisma/client';
 import createClient, { Client } from 'openapi-fetch';
+import { uuid } from 'uuidv4';
 
-import { coinbaseMiddleware } from '@middlewares/coinbaseMiddleware';
+import {
+    coinbaseMiddleware,
+    internalRequestIdKey,
+} from '@middlewares/coinbaseMiddleware';
 
 import { CoinBaseConfig } from '@models/coinbase.config';
-import { ConversionRequest, ConversionResponse } from '@models/coinbase.models';
+import { ExchangeRateResponse } from '@models/coinbase.models';
 
 import { paths } from '../../coinbase/openapi-schema';
 
@@ -15,20 +20,27 @@ class CoinBaseClient {
             baseUrl: config.baseUrl,
             cache: 'no-cache',
         });
+
+        // set middleware for logging and capturing errors
         this.client.use(coinbaseMiddleware);
     }
 
     async getConversions(
-        auth: string,
-        body: ConversionRequest,
-    ): Promise<ConversionResponse> {
-        const response = await this.client.POST('/conversions', {
-            body: {
-                data: body,
+        from: Currencies,
+    ): Promise<{ data: ExchangeRateResponse; requestId: string }> {
+        const response = await this.client.GET('/v2/exchange-rates', {
+            params: {
+                query: {
+                    currency: from,
+                },
             },
         });
 
-        return response.data;
+        return {
+            requestId:
+                response.response.headers.get(internalRequestIdKey) ?? uuid(),
+            data: response.data.data,
+        };
     }
 }
 

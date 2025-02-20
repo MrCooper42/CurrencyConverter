@@ -4,48 +4,43 @@
  */
 
 export interface paths {
-    "/conversions": {
+    "/v2/exchange-rates": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
         /**
-         * Convert a currency amount from one currency to another
-         * @description Converts funds from from currency to to currency. Funds are converted on the from account in the profile_id profile.
+         * Get a list of current exchange rates
+         * @description Get current exchange rates. Default base currency is USD but it can be defined as any supported currency (see Currencies endpoint). Returned rates will define the exchange rate for one unit of the base currency
          */
-        post: {
+        get: {
             parameters: {
-                query?: never;
+                query?: {
+                    currency?: string;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            /** @description The conversion response */
-            requestBody?: {
-                content: {
-                    "application/json": {
-                        data?: components["schemas"]["ConversionRequest"];
-                    };
-                };
-            };
+            requestBody?: never;
             responses: {
-                /** @description The conversion response */
+                /** @description The currency response */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
                         "application/json": {
-                            data?: components["schemas"]["ConversionResponse"];
+                            data?: components["schemas"]["ExchangeRateResponse"];
                         };
                     };
                 };
             };
         };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -56,33 +51,29 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        ConversionRequest: {
-            /** @description Profile ID */
-            profile_id?: string;
-            /** @description Currency the amount is in */
-            from: string;
-            /** @description Currency to convert to */
-            to: string;
-            /** @description Amount to convert */
-            amount: number;
-        };
         /** @example {
-         *       "id": "c5aaf125-d99e-41fe-82ea-ad068038b278",
-         *       "amount": "11.00000000",
-         *       "from_account_id": "5dcc143c-fb96-4f72-aebf-a165e3d29b53",
-         *       "to_account_id": "6100247f-90fc-4335-ac17-d99839f0c909",
-         *       "from": "USDC",
-         *       "to": "USD",
-         *       "fee_amount": "0.0000000000000000"
+         *       "data": {
+         *         "currency": "BTC",
+         *         "rates": {
+         *           "AED": "36.73",
+         *           "AFN": "589.50",
+         *           "ALL": "1258.82",
+         *           "AMD": "4769.49",
+         *           "ANG": "17.88",
+         *           "AOA": "1102.76",
+         *           "ARS": "90.37",
+         *           "AUD": "12.93",
+         *           "AWG": "17.93",
+         *           "AZN": "10.48",
+         *           "BAM": "17.38"
+         *         }
+         *       }
          *     } */
-        ConversionResponse: {
-            id: string;
-            amount: string;
-            from_account_id: string;
-            to_account_id: string;
-            fee_amount: string;
-            from?: string;
-            to?: string;
+        ExchangeRateResponse: {
+            currency?: string;
+            rates?: {
+                [key: string]: string;
+            };
         };
     };
     responses: never;

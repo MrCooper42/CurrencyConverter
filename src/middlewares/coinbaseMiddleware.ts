@@ -1,18 +1,19 @@
-import { Middleware } from "openapi-fetch";
+import { Middleware } from 'openapi-fetch';
 
-import { CoinbaseClientError } from "@models/coinbase.error";
+import { CoinbaseClientError } from '@models/coinbase.error';
 
-import { logger } from "@logger/logger";
+import { logger } from '@logger/logger';
 
 const requestMap = new Map<string, string>();
-const internalRequestIdKey = "internal-request-id";
+export const internalRequestIdKey = 'internal-request-id';
 /**
  * This is a middleware to capture any logs going out to coinbase
  */
 const coinbaseMiddleware: Middleware = {
     async onRequest({ request }) {
         logger.info(
-            `>>> Calling ${request.method} to ${request.url} for ${request.headers.get(internalRequestIdKey)}`
+            `>>> Calling ${request.method} to ${request.url}` +
+                ` for ${request.headers.get(internalRequestIdKey)}`,
         );
 
         const requestId = Date.now().toString(36);
@@ -27,7 +28,8 @@ const coinbaseMiddleware: Middleware = {
     },
     async onResponse({ request, response }) {
         logger.info(
-            `>>> Response ${request.method} from ${request.url} for ${request.headers.get(internalRequestIdKey)}`
+            `>>> Response ${request.method} from` +
+                ` ${request.url} for ${request.headers.get(internalRequestIdKey)}`,
         );
 
         if (response.ok) {
@@ -47,7 +49,7 @@ const coinbaseMiddleware: Middleware = {
         }
 
         throw new CoinbaseClientError(response, request, error, requestBody);
-    }
+    },
 };
 
 export { coinbaseMiddleware };
