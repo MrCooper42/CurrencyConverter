@@ -2,7 +2,7 @@
 - run `npm i`
 - run `npm run prisma:generate`
 - setup your [env](.env.example) and remove the `.example`
-  - you may need to create your on prisma db and set it up bere
+  - you may need to create your own db on [prisma](https://www.prisma.io/) and set it up here
 - run `npm run prisma:migrate`
 
 ## Running locally
