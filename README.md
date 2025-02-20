@@ -30,3 +30,5 @@ You can take these and hit import in postman with openapi3
   - These were generated from the response of exchange-rates and using chatGpt to generate the enum
 
 ## Future improvements
+I created a full service for each table just in case it would be needed to be expanded in the future but it is not used.
+Most of the handling for auth, logging, error handling, and rate limiting is managed in middleware to reduce code reuse.

@@ -1,23 +1,23 @@
-import { Currencies } from "@prisma/client";
-import { LRUCache } from "lru-cache";
-import createClient, { Client } from "openapi-fetch";
-import { uuid } from "uuidv4";
+import { Currencies } from '@prisma/client';
+import { LRUCache } from 'lru-cache';
+import createClient, { Client } from 'openapi-fetch';
+import { uuid } from 'uuidv4';
 
 import {
     coinbaseMiddleware,
-    internalRequestIdKey
-} from "@middlewares/coinbaseMiddleware";
+    internalRequestIdKey,
+} from '@middlewares/coinbaseMiddleware';
 
-import { CoinBaseConfig } from "@models/coinbase.config";
-import { ExchangeRateResponse } from "@models/coinbase.models";
+import { CoinBaseConfig } from '@models/coinbase.config';
+import { ExchangeRateResponse } from '@models/coinbase.models';
 
-import { paths } from "../../coinbase/openapi-schema";
+import { paths } from '../../coinbase/openapi-schema';
 
 const cache = new LRUCache<Currencies, ExchangeRateResponse>({
     max: 5000,
-    ttl: 3000 // Reset every 3 seconds
+    ttl: 3000, // Reset every 3 seconds
 });
-const useCache = process.env.USE_CACHE === "true";
+const useCache = process.env.USE_CACHE === 'true';
 
 class CoinBaseClient {
     private client: Client<paths, any>;
@@ -25,7 +25,7 @@ class CoinBaseClient {
     constructor(config: CoinBaseConfig) {
         this.client = createClient<paths>({
             baseUrl: config.baseUrl,
-            cache: "no-cache"
+            cache: 'no-cache',
         });
 
         // set middleware for logging and capturing errors
@@ -33,21 +33,21 @@ class CoinBaseClient {
     }
 
     async getConversions(
-        from: Currencies
+        from: Currencies,
     ): Promise<{ data: ExchangeRateResponse; requestId: string }> {
         const cachedResponse = cache.get(from);
         if (cachedResponse && useCache) {
             return {
                 requestId: uuid(),
-                data: cachedResponse
+                data: cachedResponse,
             };
         }
-        const response = await this.client.GET("/v2/exchange-rates", {
+        const response = await this.client.GET('/v2/exchange-rates', {
             params: {
                 query: {
-                    currency: from
-                }
-            }
+                    currency: from,
+                },
+            },
         });
 
         if (useCache) {
@@ -57,7 +57,7 @@ class CoinBaseClient {
         return {
             requestId:
                 response.response.headers.get(internalRequestIdKey) ?? uuid(),
-            data: response.data.data
+            data: response.data.data,
         };
     }
 }
