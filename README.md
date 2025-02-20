@@ -9,6 +9,11 @@
 - ensure you have your database migrated and setup
 - run `npm run start:dev`
 
+## Docker deploy
+First make sure you have [docker setup properly](https://www.docker.com/get-started/) then run these commands
+- run `npm run docker:build`
+- run `npm run docker:start`
+
 ## Postman
 There are 2 collections you can import to postman that use openapi3
 You can take these and hit import in postman with openapi3

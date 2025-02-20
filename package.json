@@ -15,8 +15,8 @@
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",
     "prisma:studio": "npx prisma studio",
-    "build:docker": "docker build -t currency .",
-    "start:docker": "docker run -p 8080:8080 currency"
+    "docker:build": "docker build -t currency .",
+    "docker:start": "docker run -p 8080:8080 currency"
   },
   "dependencies": {
     "@prisma/client": "^6.4.0",
